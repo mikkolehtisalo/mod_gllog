@@ -7,7 +7,7 @@ Mod_gllog interprets the authentication cookie used by Graylog2, and injects ext
 Extracted information:
 * %{gl_username}n   - The name of the authenticated user
 * %{gl_sessionid}n  - The session id
-* %{gl_signaturevalid}n - Signature check for the HMAC SHA1 signature present in the cookie
+* %{gl_signaturevalid}n - Status for signature check
 
 Results look like the following:
 
