@@ -12,7 +12,11 @@ Extracted information:
 Results look like the following:
 
 ```
-192.168.122.1 - - [24/Jan/2016:12:38:56 +0000] "GET / HTTP/1.1" 200 3594 "-" "Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0" "admin" "6cd192c1-f8e2-43c8-a061-b88e2-43c8-a061-b8" "valid"
+192.168.122.1 - - [24/Jan/2016:13:26:05 +0000] "GET /savedsearches HTTP/1.1" 200 261 "http://graylog.local:81/search?rangetype=relative&fields=message%2Csource&width=1920&relative=86400&q=" "Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0" "admin" "6cd192c1-f8e2-43c8-a061-b88e2-43c8-a061-b8" "valid"
+192.168.122.1 - - [24/Jan/2016:13:26:05 +0000] "GET /a/system/fields HTTP/1.1" 200 695 "http://graylog.local:81/search?rangetype=relative&fields=message%2Csource&width=1920&relative=86400&q=" "Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0" "admin" "6cd192c1-f8e2-43c8-a061-b88e2-43c8-a061-b8" "valid"
+192.168.122.1 - - [24/Jan/2016:13:26:06 +0000] "GET /a/dashboards/writable HTTP/1.1" 200 434 "http://graylog.local:81/search?rangetype=relative&fields=message%2Csource&width=1920&relative=86400&q=" "Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0" "admin" "6cd192c1-f8e2-43c8-a061-b88e2-43c8-a061-b8" "valid"
+192.168.122.1 - - [24/Jan/2016:13:26:06 +0000] "GET /a/streams HTTP/1.1" 200 2873 "http://graylog.local:81/search?rangetype=relative&fields=message%2Csource&width=1920&relative=86400&q=" "Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0" "admin" "6cd192c1-f8e2-43c8-a061-b88e2-43c8-a061-b8" "valid"
+
 ```
 
 # Installation and configuration
