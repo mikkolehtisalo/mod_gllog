@@ -68,7 +68,7 @@ static int check_signature(request_rec *r, const char *signature, const char *se
 	char *data = apr_psprintf(r->pool, "sessionid=%s", sessionid);
 	unsigned int i = 64;
 
-	HMAC(EVP_sha1(), pConfig->sKey, strlen(pConfig->sKey), data, strlen(data), digest, &i);
+	HMAC(EVP_sha1(), pConfig->sKey, strlen(pConfig->sKey), (const unsigned char *)data, strlen(data), (unsigned char *)digest, &i);
 	const char *hexdigest = apr_pescape_hex(r->pool, digest, i, 0);
 	ap_log_error(APLOG_MARK, APLOG_NOERRNO|APLOG_DEBUG, 0, r->server, "Generated signature %s, original %s", hexdigest, signature) ; 
 	if (apr_strnatcmp(hexdigest, signature) == 0) {
@@ -110,7 +110,7 @@ static char* decrypt_sessionid(const char *sessionid, request_rec *r) {
 		apr_cpystrn (key, pConfig->sKey, 17);
 	}
 	// AES-128 ECB... 
-	if(1 != EVP_DecryptInit_ex(ctx, EVP_aes_128_ecb(), NULL, key, NULL)) {
+	if(1 != EVP_DecryptInit_ex(ctx, EVP_aes_128_ecb(), NULL, (const unsigned char *)key, NULL)) {
 		ap_log_error(APLOG_MARK, APLOG_NOERRNO|APLOG_NOTICE, 0, r->server, "Error initializing decryption"); 
 		goto cleanup;
 	}
@@ -125,7 +125,7 @@ static char* decrypt_sessionid(const char *sessionid, request_rec *r) {
 	int total = 0;		// Count the total bytes decrypted
 	int x=0;
 	while ( x < rounds ) {
-		if(1 != EVP_DecryptUpdate(ctx, plaintext+(x*32), &decrypted, session_binary+(x*32), 32)) {
+		if(1 != EVP_DecryptUpdate(ctx, (unsigned char *)plaintext+(x*32), &decrypted, (const unsigned char *)session_binary+(x*32), 32)) {
 			ap_log_error(APLOG_MARK, APLOG_NOERRNO|APLOG_NOTICE, 0, r->server, "Error in decryption"); 
 			plaintext = NULL;
 			goto cleanup;
@@ -186,6 +186,7 @@ static int gllog_handler(request_rec *r)
 	
 	gl_play_token *token = get_session_token(r);
 	if (token != NULL) {
+		// Retrieve username & sessionid
 		ap_log_error(APLOG_MARK, APLOG_NOERRNO|APLOG_DEBUG, 0, r->server, "Received signature: %s sessionid: %s", token->signature, token->sessionid ); 
 		sessionstring = decrypt_sessionid(token->sessionid, r);
 		if (sessionstring != NULL) {
@@ -194,16 +195,17 @@ static int gllog_handler(request_rec *r)
 				sessionid = ap_pregsub(r->pool, "$2", sessionstring, cpat->re_nsub+1, pmatch);
     		}
 		}
-	}
-	
-	if (pConfig->bSignature) {
-		if (check_signature(r, token->signature, token->sessionid) == 1) {
-			signaturestatus = "valid";
+		
+		// Check the signature
+		if (pConfig->bSignature) {
+			if (check_signature(r, token->signature, token->sessionid) == 1) {
+				signaturestatus = "valid";
+			}
+		} else {
+			signaturestatus = "disabled";
 		}
-	} else {
-		signaturestatus = "disabled";
 	}
-	
+
 	set_module_notes(r, username, sessionid, signaturestatus);
     
     return OK;
