@@ -1,3 +1,5 @@
+![Coverity Scan Build Status](https://scan.coverity.com/projects/7722/badge.svg)
+
 # mod_gllog
 
 Mod_gllog interprets the authentication cookie used by Graylog2, and injects extra information to the request context for logging purposes. This can be used to enhance the access logs for the web interface with user information.
