@@ -19,7 +19,7 @@
 #include <openssl/aes.h>
 #include "http_protocol.h"
 
-static const char *gl_cookie_regex = "^PLAY_SESSION=([A-Za-z0-9_]+)-sessionid=([A-Za-z0-9_]+)$";
+static const char *gl_cookie_regex = "PLAY_SESSION=([A-Za-z0-9_]+)-sessionid=([A-Za-z0-9_]+)(;.*)?$";
 static const char *gl_sessionstring_regex = "^([^\t]+)\t([a-z0-9-]+)$";
 
 module AP_MODULE_DECLARE_DATA gllog_module;
@@ -89,7 +89,7 @@ static char* decrypt_sessionid(const char *sessionid, request_rec *r) {
 
 	// Initialize OpenSSL
 	EVP_CIPHER_CTX *ctx;
-    ctx = EVP_CIPHER_CTX_new();
+	ctx = EVP_CIPHER_CTX_new();
   	EVP_CIPHER_CTX_init(ctx);
   	EVP_CIPHER_CTX_set_padding(ctx, 1); // PKCS#5
   	
@@ -149,7 +149,7 @@ static gl_play_token* get_session_token(request_rec *r) {
 	gl_play_token *token = NULL;
 	apr_table_entry_t *e = NULL;
 	ap_regex_t *cpat = ap_pregcomp(r->pool, gl_cookie_regex, AP_REG_EXTENDED|AP_REG_ICASE);
-	ap_regmatch_t pmatch[3];
+	ap_regmatch_t pmatch[4];
 	
 	const apr_array_header_t *headers;
 	int i = 0;
