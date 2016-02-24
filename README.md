@@ -20,6 +20,9 @@ Results look like the following:
 
 # Installation and configuration
 
+Requirements:
+* Apxs 1.5.x (For 1.4.x see [issue #1](https://github.com/mikkolehtisalo/mod_gllog/issues/1))
+
 Compile and install the module:
 
 ```
