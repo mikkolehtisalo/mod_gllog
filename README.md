@@ -18,10 +18,13 @@ Results look like the following:
 192.168.122.1 - - [24/Jan/2016:13:26:06 +0000] "GET /a/streams HTTP/1.1" 200 2873 "http://graylog.local:81/search?rangetype=relative&fields=message%2Csource&width=1920&relative=86400&q=" "Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0" "admin" "6cd192c1-f8e2-43c8-a061-b88e2-43c8-a061-b8" "valid"
 ```
 
-# Installation and configuration
+# Requirements
 
 Requirements:
 * Apxs 1.5.x (For 1.4.x see [issue #1](https://github.com/mikkolehtisalo/mod_gllog/issues/1))
+* Graylog 1.x (For 2.x use RestAccessLogFilter after [issue #1815](https://github.com/Graylog2/graylog2-server/issues/1815) has been solved)
+
+# Installation and configuration
 
 Compile and install the module:
 
